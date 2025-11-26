@@ -12,35 +12,36 @@
 
 
 
-class ListNode1 {
-    val: number
-    next: ListNode1 | null
-    constructor(val?: number, next?: ListNode1 | null) {
-        this.val = (val === undefined ? 0 : val)
-        this.next = (next === undefined ? null : next)
-    }
-}
 
+function mergeLists(list1: ListNode | null, list2: ListNode | null): ListNode | null {
+    const merged = new ListNode();
+    let currentNode = merged;
 
-function mergeKLists(lists: Array<ListNode1 | null>): ListNode1 | null {
-    let nodesArray: Array<ListNode1> = []
-
-    lists.forEach((node) => {
-        while (node) {
-            nodesArray.push(node);
-            node = node.next;
+    while (list1 !== null || list2 !== null) {
+        if (list1 != null && (list2 == null || list1.val <= list2.val)) {
+            currentNode.next = list1;
+            list1 = list1.next;
+        } else {
+            currentNode.next = list2;
+            list2 = list2!.next;
         }
-    });
+        currentNode = currentNode.next!;
+    }
 
-    nodesArray.sort((node1, node2) => node1.val - node2.val);
+    const result = merged.next;
+    return result;
 
-    let resultNode = nodesArray[0] ?? null;
-
-    nodesArray.forEach((node, index, arr) => {
-        node.next = arr[index + 1] ?? null;
-    });
-
-    return resultNode;
+}
+function mergeKLists(lists: Array<ListNode | null>): ListNode | null {
+    let interval = 0;
+    while (interval < lists.length) {
+        for (let i = 0; i < lists.length - interval; i *= 2) {
+            lists[i] = mergeLists(lists[i], lists[i + interval]);
+            lists[i + interval] = null;
+        }
+        interval *= 2;
+    }
+    return lists[0];
 };
 // @lc code=end
 
