@@ -1,0 +1,24 @@
+// Last updated: 16/7/2026, 9:21:50 pm
+function generateParenthesis(n: number): string[] {
+    const parenthesis: string[] = [];
+    let stack: string[] = [];
+    function backtrack(open: number, close: number): void {
+        if (open === close && open === n) {
+            parenthesis.push(stack.join(''));
+            return;
+        }
+        if (open < n) {
+            stack.push("(");
+            backtrack(open + 1, close);
+            stack.pop();
+        }
+        if (close < open) {
+            stack.push(")");
+            backtrack(open, close + 1);
+            stack.pop();
+        }
+    }
+    backtrack(0, 0);
+    return parenthesis;
+
+};
