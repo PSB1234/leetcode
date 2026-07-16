@@ -1,0 +1,22 @@
+// Last updated: 16/7/2026, 9:15:49 pm
+function minOperations(nums: number[]): number {
+    let iteration = 0;
+    const stack = new Array<number>()
+    for (let i = 0; i < nums.length; i++) {
+        while (stack.length !== 0 && stack[stack.length - 1] > nums[i]) {
+            const poped = stack.pop();
+            if (poped !== stack[stack.length - 1]) {
+                iteration++;
+            }
+        }
+        if (stack.length === 0 || stack[stack.length - 1] <= nums[i]) {
+            stack.push(nums[i]);
+        }
+    }
+    while (stack.length) {
+        const pop = stack.pop();
+        if (pop === stack[stack.length - 1] || pop === 0) continue;
+        iteration++;
+    }
+    return iteration;
+};
